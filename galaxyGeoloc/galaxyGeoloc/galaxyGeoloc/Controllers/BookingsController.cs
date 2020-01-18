@@ -15,58 +15,56 @@ namespace galaxyGeoloc.Controllers
 {
     public class BookingsController : ApiController
     {
-        private galaxyGeolocContext db2 = new galaxyGeolocContext();
+        private galaxyGeolocContext db = new galaxyGeolocContext();
 
-        private IRepository<Booking, galaxyGeolocContext> db;
 
-        public BookingsController()
+        public IQueryable<Booking> GetBookings()
         {
-           // this.db = _db;
-            this.db = new Repository<Booking, galaxyGeolocContext>(db2); ;
+            return db.Bookings.AsQueryable();
         }
+        //public List<Room> GetRooms()
+        //{
+        //    List<Room> list = new List<Room>() { new Room() { hotelId=1,hotelName="Hyderabad",address="Address",city="Hyderabad",zipCode=530002} };
+        //    return list;
+        //}
 
-        // GET: api/Bookings
-        public IEnumerable<Booking> GetBookings()
-        {
-            return db.GetAll();//.Bookings;
-        }
-
-        // GET: api/Bookings/5
+        // GET: api/Rooms/5
         [ResponseType(typeof(Booking))]
-        public IHttpActionResult GetBooking(int id)
+        public IHttpActionResult GetBookings(int id)
         {
-            Booking booking = db.FindBy(o => o.Id == id).FirstOrDefault();
-            if (booking == null)
+            Booking room = db.Bookings.Find(id);
+            if (room == null)
             {
                 return NotFound();
             }
 
-            return Ok(booking);
+            return Ok(room);
         }
 
-        // PUT: api/Bookings/5
+        // PUT: api/Rooms/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutBooking(int id, Booking booking)
+        public IHttpActionResult PutRoom(int id, Booking room)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != booking.Id)
+            if (id != room.Id)
             {
                 return BadRequest();
             }
 
-            //   db.Entry(booking).State = EntityState.Modified;
+            //db.Edit(room);
+            db.Entry(room).State = EntityState.Modified;
 
             try
             {
-                db.Save();
+                db.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!BookingExists(id))
+                if (!RoomExists(id))
                 {
                     return NotFound();
                 }
@@ -79,49 +77,49 @@ namespace galaxyGeoloc.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Bookings
+        // POST: api/Rooms
         [ResponseType(typeof(Booking))]
-        public IHttpActionResult PostBooking(Booking booking)
+        public IHttpActionResult PostRoom(Booking Room)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.Create(booking);
-            db.Save();
+            db.Bookings.Add(Room);
+            db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = booking.Id }, booking);
+            return CreatedAtRoute("DefaultApi", new { id = Room.Id }, Room);
         }
 
-        // DELETE: api/Bookings/5
+        // DELETE: api/Rooms/5
         [ResponseType(typeof(Booking))]
-        public IHttpActionResult DeleteBooking(int id)
+        public IHttpActionResult DeleteRoom(int id)
         {
-            Booking booking = db.FindBy(o => o.Id == id).FirstOrDefault();
-            if (booking == null)
+            Booking Room = db.Bookings.Find(id);
+            if (Room == null)
             {
                 return NotFound();
             }
 
-            db.Delete(booking);
-           // db.SaveChanges();
+            db.Bookings.Remove(Room);
+            db.SaveChanges();
 
-            return Ok(booking);
+            return Ok(Room);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                //db.Dispose();
+                db.Dispose();
             }
             base.Dispose(disposing);
         }
 
-        private bool BookingExists(int id)
+        private bool RoomExists(int id)
         {
-            return true;
+            return db.Bookings.Count(o => o.Id == id) < 0;
         }
     }
 }
