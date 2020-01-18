@@ -15,25 +15,24 @@ namespace galaxyGeoloc.Controllers
 {
     public class HotelsController : ApiController
     {
-        //private galaxyGeolocContext db = new galaxyGeolocContext();
+        private galaxyGeolocContext db = new galaxyGeolocContext();
 
-        private IRepository<hotel, galaxyGeolocContext> db;
 
-        public HotelsController(IRepository<hotel, galaxyGeolocContext> _db)
-        {
-            db = _db;
-        }
-        // GET: api/Rooms
         public IQueryable<hotel> GetRooms()
         {
-            return db.GetAll();//.Rooms;
+            return db.Hotels.AsQueryable();
         }
+        //public List<hotel> GetRooms()
+        //{
+        //    List<hotel> list = new List<hotel>() { new hotel() { hotelId=1,hotelName="Hyderabad",address="Address",city="Hyderabad",zipCode=530002} };
+        //    return list;
+        //}
 
         // GET: api/Rooms/5
         [ResponseType(typeof(hotel))]
         public IHttpActionResult GetRoom(int id)
         {
-            hotel room = db.FindBy(o => o.hotelId == id).FirstOrDefault();
+            hotel room = db.Hotels.Find(id);
             if (room == null)
             {
                 return NotFound();
@@ -56,12 +55,12 @@ namespace galaxyGeoloc.Controllers
                 return BadRequest();
             }
 
-            db.Edit(room);
-            // db.Entry(room).State = EntityState.Modified;
+            //db.Edit(room);
+             db.Entry(room).State = EntityState.Modified;
 
             try
             {
-                db.Save();
+                db.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -87,8 +86,8 @@ namespace galaxyGeoloc.Controllers
                 return BadRequest(ModelState);
             }
 
-            db.Create(hotel);
-            db.Save();
+            db.Hotels.Add(hotel);
+            db.SaveChanges();
 
             return CreatedAtRoute("DefaultApi", new { id = hotel.hotelId }, hotel);
         }
@@ -97,31 +96,30 @@ namespace galaxyGeoloc.Controllers
         [ResponseType(typeof(hotel))]
         public IHttpActionResult DeleteRoom(int id)
         {
-            hotel hotel = db.FindBy(o => o.hotelId == id).FirstOrDefault();
+            hotel hotel = db.Hotels.Find(id);
             if (hotel == null)
             {
                 return NotFound();
             }
 
-            db.Delete(hotel);
-            db.Save();
+            db.Hotels.Remove(hotel);
+            db.SaveChanges();
 
             return Ok(hotel);
         }
 
-        //protected override void Dispose(bool disposing)
-        //{
-        //    if (disposing)
-        //    {
-        //        db.Dispose();
-        //    }
-        //    base.Dispose(disposing);
-        //}
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
         private bool RoomExists(int id)
         {
-            hotel room = db.FindBy(o => o.hotelId == id).FirstOrDefault();
-            return room != null;
+            return db.Hotels.Count(o => o.hotelId == id) < 0;
         }
     }
 }

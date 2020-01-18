@@ -15,25 +15,24 @@ namespace galaxyGeoloc.Controllers
 {
     public class RoomsController : ApiController
     {
-        //private galaxyGeolocContext db = new galaxyGeolocContext();
+        private galaxyGeolocContext db = new galaxyGeolocContext();
 
-        private IRepository<Room, galaxyGeolocContext> db;
 
-        public RoomsController(IRepository<Room, galaxyGeolocContext> _db)
-        {
-            db = _db;
-        }
-        // GET: api/Rooms
         public IQueryable<Room> GetRooms()
         {
-            return db.GetAll();//.Rooms;
+            return db.Rooms.AsQueryable();
         }
+        //public List<Room> GetRooms()
+        //{
+        //    List<Room> list = new List<Room>() { new Room() { hotelId=1,hotelName="Hyderabad",address="Address",city="Hyderabad",zipCode=530002} };
+        //    return list;
+        //}
 
         // GET: api/Rooms/5
         [ResponseType(typeof(Room))]
         public IHttpActionResult GetRoom(int id)
         {
-            Room room = db.FindBy(o => o.Id == id).FirstOrDefault();
+            Room room = db.Rooms.Find(id);
             if (room == null)
             {
                 return NotFound();
@@ -56,12 +55,12 @@ namespace galaxyGeoloc.Controllers
                 return BadRequest();
             }
 
-            db.Edit(room);
-            // db.Entry(room).State = EntityState.Modified;
+            //db.Edit(room);
+            db.Entry(room).State = EntityState.Modified;
 
             try
             {
-                db.Save();
+                db.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -80,48 +79,47 @@ namespace galaxyGeoloc.Controllers
 
         // POST: api/Rooms
         [ResponseType(typeof(Room))]
-        public IHttpActionResult PostRoom(Room room)
+        public IHttpActionResult PostRoom(Room Room)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.Create(room);
-            db.Save();
+            db.Rooms.Add(Room);
+            db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = room.Id }, room);
+            return CreatedAtRoute("DefaultApi", new { id = Room.Id }, Room);
         }
 
         // DELETE: api/Rooms/5
         [ResponseType(typeof(Room))]
         public IHttpActionResult DeleteRoom(int id)
         {
-            Room room = db.FindBy(o => o.Id == id).FirstOrDefault();
-            if (room == null)
+            Room Room = db.Rooms.Find(id);
+            if (Room == null)
             {
                 return NotFound();
             }
 
-            db.Delete(room);
-            db.Save();
+            db.Rooms.Remove(Room);
+            db.SaveChanges();
 
-            return Ok(room);
+            return Ok(Room);
         }
 
-        //protected override void Dispose(bool disposing)
-        //{
-        //    if (disposing)
-        //    {
-        //        db.Dispose();
-        //    }
-        //    base.Dispose(disposing);
-        //}
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
         private bool RoomExists(int id)
         {
-            Room room = db.FindBy(o => o.Id == id).FirstOrDefault();
-            return room != null;
+            return db.Rooms.Count(o => o.Id == id) < 0;
         }
     }
 }

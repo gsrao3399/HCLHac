@@ -8,12 +8,7 @@
         <EntityTypeShape EntityType="GalaxyDBModel.TempTable" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="GalaxyDBModel.Room" Width="1.5" PointX="3.375" PointY="0.75" />
         <EntityTypeShape EntityType="GalaxyDBModel.hotel" Width="1.5" PointX="0.75" PointY="4" />
-        <EntityTypeShape EntityType="GalaxyDBModel.logging" Width="1.5" PointX="3" PointY="11" />
-        <EntityTypeShape EntityType="GalaxyDBModel.userBooking" Width="1.5" PointX="3" PointY="6.5" />
-        <EntityTypeShape EntityType="GalaxyDBModel.user" Width="1.5" PointX="0.75" PointY="7" />
-        <AssociationConnector Association="GalaxyDBModel.FK__userBooki__hotel__1ED998B2" />
-        <AssociationConnector Association="GalaxyDBModel.FK__logging__userId__15502E78" />
-        <AssociationConnector Association="GalaxyDBModel.FK__userBooki__userI__1DE57479" />
+        <EntityTypeShape EntityType="GalaxyDBModel.Booking" Width="1.5" PointX="5.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

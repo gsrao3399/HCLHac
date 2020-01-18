@@ -29,7 +29,7 @@ namespace galaxyGeoloc.Repository
         where C : DbContext
     {
         public readonly DbContext _context;
-
+        
         public Repository(DbContext context)
         {
             _context = context;

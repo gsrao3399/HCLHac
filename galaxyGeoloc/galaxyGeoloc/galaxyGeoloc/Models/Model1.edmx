@@ -5,6 +5,18 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="GalaxyDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Booking">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="hotelid" Type="int" />
+          <Property Name="rooms" Type="int" />
+          <Property Name="totalprice" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="createdate" Type="datetime" />
+          <Property Name="modifieddate" Type="datetime" />
+        </EntityType>
         <EntityType Name="hotels">
           <Key>
             <PropertyRef Name="hotelId" />
@@ -14,37 +26,10 @@
           <Property Name="city" Type="nvarchar" MaxLength="50" />
           <Property Name="address" Type="nvarchar" MaxLength="100" />
           <Property Name="zipCode" Type="int" />
+          <Property Name="Price" Type="varchar" MaxLength="50" />
+          <Property Name="Discount" Type="varchar" MaxLength="50" />
+          <Property Name="roomType" Type="varchar" MaxLength="50" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'GalaxyDB.dbo.hoteTariff' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="hoteTariff">
-          <Property Name="hotelId" Type="int" />
-          <Property Name="roomPrice" Type="decimal" Precision="18" Scale="0" />
-          <Property Name="roomType" Type="varchar" MaxLength="10" />
-        </EntityType>-->
-        <EntityType Name="logging">
-          <Key>
-            <PropertyRef Name="logId" />
-          </Key>
-          <Property Name="logId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="discription" Type="varchar(max)" />
-          <Property Name="createdDateTime" Type="datetime" />
-          <Property Name="userId" Type="int" />
-        </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'GalaxyDB.dbo.registration' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="registration">
-          <Property Name="userId" Type="int" />
-          <Property Name="userName" Type="nvarchar" MaxLength="50" />
-          <Property Name="emailId" Type="nvarchar" MaxLength="50" />
-          <Property Name="password" Type="nvarchar" MaxLength="50" />
-          <Property Name="roletype" Type="varchar" MaxLength="10" />
-          <Property Name="createdDateTime" Type="datetime" />
-          <Property Name="loginTimeDate" Type="datetime" />
-          <Property Name="logoutDateTime" Type="datetime" />
-          <Property Name="createdBy" Type="int" />
-          <Property Name="status" Type="varchar" MaxLength="10" />
-        </EntityType>-->
         <EntityType Name="Rooms">
           <Key>
             <PropertyRef Name="Id" />
@@ -66,84 +51,11 @@ warning 6013: The table/view 'GalaxyDB.dbo.registration' does not have a primary
           <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
         </EntityType>
-        <EntityType Name="userBookings">
-          <Key>
-            <PropertyRef Name="transactionId" />
-          </Key>
-          <Property Name="transactionId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="userId" Type="int" />
-          <Property Name="hotelId" Type="int" />
-          <Property Name="numberOfRooms" Type="int" />
-          <Property Name="roomType" Type="int" />
-          <Property Name="totalPrice" Type="decimal" Precision="18" Scale="0" />
-          <Property Name="createdDateTime" Type="datetime" />
-          <Property Name="modifiedBy" Type="int" />
-          <Property Name="modifiedDate" Type="datetime" />
-        </EntityType>
-        <EntityType Name="users">
-          <Key>
-            <PropertyRef Name="userId" />
-          </Key>
-          <Property Name="userId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="userName" Type="nvarchar" MaxLength="50" />
-          <Property Name="roleType" Type="varchar" MaxLength="10" />
-          <Property Name="createdDateTime" Type="datetime" />
-        </EntityType>
-        <Association Name="FK__logging__userId__15502E78">
-          <End Role="users" Type="Self.users" Multiplicity="0..1" />
-          <End Role="logging" Type="Self.logging" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="users">
-              <PropertyRef Name="userId" />
-            </Principal>
-            <Dependent Role="logging">
-              <PropertyRef Name="userId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__userBooki__hotel__1ED998B2">
-          <End Role="hotels" Type="Self.hotels" Multiplicity="0..1" />
-          <End Role="userBookings" Type="Self.userBookings" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="hotels">
-              <PropertyRef Name="hotelId" />
-            </Principal>
-            <Dependent Role="userBookings">
-              <PropertyRef Name="hotelId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__userBooki__userI__1DE57479">
-          <End Role="users" Type="Self.users" Multiplicity="0..1" />
-          <End Role="userBookings" Type="Self.userBookings" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="users">
-              <PropertyRef Name="userId" />
-            </Principal>
-            <Dependent Role="userBookings">
-              <PropertyRef Name="userId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="GalaxyDBModelStoreContainer">
+          <EntitySet Name="Booking" EntityType="Self.Booking" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hotels" EntityType="Self.hotels" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="logging" EntityType="Self.logging" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Rooms" EntityType="Self.Rooms" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TempTable" EntityType="Self.TempTable" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="userBookings" EntityType="Self.userBookings" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__logging__userId__15502E78" Association="Self.FK__logging__userId__15502E78">
-            <End Role="users" EntitySet="users" />
-            <End Role="logging" EntitySet="logging" />
-          </AssociationSet>
-          <AssociationSet Name="FK__userBooki__hotel__1ED998B2" Association="Self.FK__userBooki__hotel__1ED998B2">
-            <End Role="hotels" EntitySet="hotels" />
-            <End Role="userBookings" EntitySet="userBookings" />
-          </AssociationSet>
-          <AssociationSet Name="FK__userBooki__userI__1DE57479" Association="Self.FK__userBooki__userI__1DE57479">
-            <End Role="users" EntitySet="users" />
-            <End Role="userBookings" EntitySet="userBookings" />
-          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -160,21 +72,7 @@ warning 6013: The table/view 'GalaxyDB.dbo.registration' does not have a primary
           <EntitySet Name="TempTables" EntityType="Self.TempTable" />
           <EntitySet Name="Rooms" EntityType="GalaxyDBModel.Room" />
           <EntitySet Name="hotels" EntityType="GalaxyDBModel.hotel" />
-          <EntitySet Name="loggings" EntityType="GalaxyDBModel.logging" />
-          <EntitySet Name="userBookings" EntityType="GalaxyDBModel.userBooking" />
-          <EntitySet Name="users" EntityType="GalaxyDBModel.user" />
-          <AssociationSet Name="FK__userBooki__hotel__1ED998B2" Association="GalaxyDBModel.FK__userBooki__hotel__1ED998B2">
-            <End Role="hotel" EntitySet="hotels" />
-            <End Role="userBooking" EntitySet="userBookings" />
-          </AssociationSet>
-          <AssociationSet Name="FK__logging__userId__15502E78" Association="GalaxyDBModel.FK__logging__userId__15502E78">
-            <End Role="user" EntitySet="users" />
-            <End Role="logging" EntitySet="loggings" />
-          </AssociationSet>
-          <AssociationSet Name="FK__userBooki__userI__1DE57479" Association="GalaxyDBModel.FK__userBooki__userI__1DE57479">
-            <End Role="user" EntitySet="users" />
-            <End Role="userBooking" EntitySet="userBookings" />
-          </AssociationSet>
+          <EntitySet Name="Bookings" EntityType="GalaxyDBModel.Booking" />
         </EntityContainer>
         <EntityType Name="Room">
           <Key>
@@ -199,81 +97,22 @@ warning 6013: The table/view 'GalaxyDB.dbo.registration' does not have a primary
           <Property Name="city" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="zipCode" Type="Int32" />
-          <NavigationProperty Name="userBookings" Relationship="GalaxyDBModel.FK__userBooki__hotel__1ED998B2" FromRole="hotel" ToRole="userBooking" />
+          <Property Name="Price" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Discount" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="roomType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityType Name="logging">
+        <EntityType Name="Booking">
           <Key>
-            <PropertyRef Name="logId" />
+            <PropertyRef Name="Id" />
           </Key>
-          <Property Name="logId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="discription" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="createdDateTime" Type="DateTime" Precision="3" />
-          <Property Name="userId" Type="Int32" />
-          <NavigationProperty Name="user" Relationship="GalaxyDBModel.FK__logging__userId__15502E78" FromRole="logging" ToRole="user" />
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="hotelid" Type="Int32" />
+          <Property Name="rooms" Type="Int32" />
+          <Property Name="totalprice" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="createdate" Type="DateTime" Precision="3" />
+          <Property Name="modifieddate" Type="DateTime" Precision="3" />
         </EntityType>
-        <EntityType Name="userBooking">
-          <Key>
-            <PropertyRef Name="transactionId" />
-          </Key>
-          <Property Name="transactionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="userId" Type="Int32" />
-          <Property Name="hotelId" Type="Int32" />
-          <Property Name="numberOfRooms" Type="Int32" />
-          <Property Name="roomType" Type="Int32" />
-          <Property Name="totalPrice" Type="Decimal" Precision="18" Scale="0" />
-          <Property Name="createdDateTime" Type="DateTime" Precision="3" />
-          <Property Name="modifiedBy" Type="Int32" />
-          <Property Name="modifiedDate" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="hotel" Relationship="GalaxyDBModel.FK__userBooki__hotel__1ED998B2" FromRole="userBooking" ToRole="hotel" />
-          <NavigationProperty Name="user" Relationship="GalaxyDBModel.FK__userBooki__userI__1DE57479" FromRole="userBooking" ToRole="user" />
-        </EntityType>
-        <EntityType Name="user">
-          <Key>
-            <PropertyRef Name="userId" />
-          </Key>
-          <Property Name="userId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="userName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="roleType" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="createdDateTime" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="loggings" Relationship="GalaxyDBModel.FK__logging__userId__15502E78" FromRole="user" ToRole="logging" />
-          <NavigationProperty Name="userBookings" Relationship="GalaxyDBModel.FK__userBooki__userI__1DE57479" FromRole="user" ToRole="userBooking" />
-        </EntityType>
-        <Association Name="FK__userBooki__hotel__1ED998B2">
-          <End Type="GalaxyDBModel.hotel" Role="hotel" Multiplicity="0..1" />
-          <End Type="GalaxyDBModel.userBooking" Role="userBooking" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="hotel">
-              <PropertyRef Name="hotelId" />
-            </Principal>
-            <Dependent Role="userBooking">
-              <PropertyRef Name="hotelId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__logging__userId__15502E78">
-          <End Type="GalaxyDBModel.user" Role="user" Multiplicity="0..1" />
-          <End Type="GalaxyDBModel.logging" Role="logging" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="user">
-              <PropertyRef Name="userId" />
-            </Principal>
-            <Dependent Role="logging">
-              <PropertyRef Name="userId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__userBooki__userI__1DE57479">
-          <End Type="GalaxyDBModel.user" Role="user" Multiplicity="0..1" />
-          <End Type="GalaxyDBModel.userBooking" Role="userBooking" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="user">
-              <PropertyRef Name="userId" />
-            </Principal>
-            <Dependent Role="userBooking">
-              <PropertyRef Name="userId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -306,6 +145,9 @@ warning 6013: The table/view 'GalaxyDB.dbo.registration' does not have a primary
           <EntitySetMapping Name="hotels">
             <EntityTypeMapping TypeName="GalaxyDBModel.hotel">
               <MappingFragment StoreEntitySet="hotels">
+                <ScalarProperty Name="roomType" ColumnName="roomType" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
                 <ScalarProperty Name="zipCode" ColumnName="zipCode" />
                 <ScalarProperty Name="address" ColumnName="address" />
                 <ScalarProperty Name="city" ColumnName="city" />
@@ -314,38 +156,16 @@ warning 6013: The table/view 'GalaxyDB.dbo.registration' does not have a primary
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="loggings">
-            <EntityTypeMapping TypeName="GalaxyDBModel.logging">
-              <MappingFragment StoreEntitySet="logging">
-                <ScalarProperty Name="userId" ColumnName="userId" />
-                <ScalarProperty Name="createdDateTime" ColumnName="createdDateTime" />
-                <ScalarProperty Name="discription" ColumnName="discription" />
-                <ScalarProperty Name="logId" ColumnName="logId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="userBookings">
-            <EntityTypeMapping TypeName="GalaxyDBModel.userBooking">
-              <MappingFragment StoreEntitySet="userBookings">
-                <ScalarProperty Name="modifiedDate" ColumnName="modifiedDate" />
-                <ScalarProperty Name="modifiedBy" ColumnName="modifiedBy" />
-                <ScalarProperty Name="createdDateTime" ColumnName="createdDateTime" />
-                <ScalarProperty Name="totalPrice" ColumnName="totalPrice" />
-                <ScalarProperty Name="roomType" ColumnName="roomType" />
-                <ScalarProperty Name="numberOfRooms" ColumnName="numberOfRooms" />
-                <ScalarProperty Name="hotelId" ColumnName="hotelId" />
-                <ScalarProperty Name="userId" ColumnName="userId" />
-                <ScalarProperty Name="transactionId" ColumnName="transactionId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="users">
-            <EntityTypeMapping TypeName="GalaxyDBModel.user">
-              <MappingFragment StoreEntitySet="users">
-                <ScalarProperty Name="createdDateTime" ColumnName="createdDateTime" />
-                <ScalarProperty Name="roleType" ColumnName="roleType" />
-                <ScalarProperty Name="userName" ColumnName="userName" />
-                <ScalarProperty Name="userId" ColumnName="userId" />
+          <EntitySetMapping Name="Bookings">
+            <EntityTypeMapping TypeName="GalaxyDBModel.Booking">
+              <MappingFragment StoreEntitySet="Booking">
+                <ScalarProperty Name="modifieddate" ColumnName="modifieddate" />
+                <ScalarProperty Name="createdate" ColumnName="createdate" />
+                <ScalarProperty Name="totalprice" ColumnName="totalprice" />
+                <ScalarProperty Name="rooms" ColumnName="rooms" />
+                <ScalarProperty Name="hotelid" ColumnName="hotelid" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

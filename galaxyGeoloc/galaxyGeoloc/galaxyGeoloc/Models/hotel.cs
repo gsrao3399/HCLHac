@@ -14,19 +14,13 @@ namespace galaxyGeoloc.Models
     
     public partial class hotel
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public hotel()
-        {
-            this.userBookings = new HashSet<userBooking>();
-        }
-    
         public int hotelId { get; set; }
         public string hotelName { get; set; }
         public string city { get; set; }
         public string address { get; set; }
         public Nullable<int> zipCode { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<userBooking> userBookings { get; set; }
+        public string Price { get; set; }
+        public string Discount { get; set; }
+        public string roomType { get; set; }
     }
 }

@@ -15,12 +15,16 @@ namespace galaxyGeoloc.Models
         // For more information refer to the documentation:
         // http://msdn.microsoft.com/en-us/data/jj591621.aspx
     
-        public galaxyGeolocContext() : base("name=galaxyGeolocContext")
+        public galaxyGeolocContext() : base("name=GalaxyDBEntities")
         {
         }
 
         public System.Data.Entity.DbSet<galaxyGeoloc.Models.TempTable> TempTables { get; set; }
 
         public System.Data.Entity.DbSet<galaxyGeoloc.Models.Room> Rooms { get; set; }
+
+        public System.Data.Entity.DbSet<galaxyGeoloc.Models.hotel> Hotels { get; set; }
+
+        public System.Data.Entity.DbSet<galaxyGeoloc.Models.Booking> Bookings { get; set; }
     }
 }

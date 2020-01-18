@@ -20,7 +20,7 @@ namespace galaxyGeoloc
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
-
+            
             config.Formatters.Remove(config.Formatters.JsonFormatter);
             config.Filters.Add(new CustomExceptionFilter());
         }

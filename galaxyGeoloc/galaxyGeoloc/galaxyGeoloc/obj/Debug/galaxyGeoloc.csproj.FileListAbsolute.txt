@@ -190,3 +190,4 @@ c:\users\hackathon\source\repos\galaxyGeoloc\galaxyGeoloc\bin\Microsoft.CodeDom.
 c:\users\hackathon\source\repos\galaxyGeoloc\galaxyGeoloc\obj\Debug\galaxyGeoloc.csproj.CopyComplete
 c:\users\hackathon\source\repos\galaxyGeoloc\galaxyGeoloc\obj\Debug\galaxyGeoloc.dll
 c:\users\hackathon\source\repos\galaxyGeoloc\galaxyGeoloc\obj\Debug\galaxyGeoloc.pdb
+c:\users\hackathon\source\repos\galaxyGeoloc\galaxyGeoloc\obj\Debug\galaxyGeoloc.csprojAssemblyReference.cache

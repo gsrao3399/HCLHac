@@ -28,8 +28,6 @@ namespace galaxyGeoloc.Models
         public virtual DbSet<TempTable> TempTables { get; set; }
         public virtual DbSet<Room> Rooms { get; set; }
         public virtual DbSet<hotel> hotels { get; set; }
-        public virtual DbSet<logging> loggings { get; set; }
-        public virtual DbSet<userBooking> userBookings { get; set; }
-        public virtual DbSet<user> users { get; set; }
+        public virtual DbSet<Booking> Bookings { get; set; }
     }
 }
