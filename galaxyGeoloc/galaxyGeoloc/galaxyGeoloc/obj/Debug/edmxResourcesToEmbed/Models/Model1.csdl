@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="GalaxyDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="TempTable">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityContainer Name="GalaxyDBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="TempTables" EntityType="Self.TempTable" />
+    <EntitySet Name="Rooms" EntityType="GalaxyDBModel.Room" />
+    <EntitySet Name="hotels" EntityType="GalaxyDBModel.hotel" />
+    <EntitySet Name="loggings" EntityType="GalaxyDBModel.logging" />
+    <EntitySet Name="userBookings" EntityType="GalaxyDBModel.userBooking" />
+    <EntitySet Name="users" EntityType="GalaxyDBModel.user" />
+    <AssociationSet Name="FK__userBooki__hotel__1ED998B2" Association="GalaxyDBModel.FK__userBooki__hotel__1ED998B2">
+      <End Role="hotel" EntitySet="hotels" />
+      <End Role="userBooking" EntitySet="userBookings" />
+    </AssociationSet>
+    <AssociationSet Name="FK__logging__userId__15502E78" Association="GalaxyDBModel.FK__logging__userId__15502E78">
+      <End Role="user" EntitySet="users" />
+      <End Role="logging" EntitySet="loggings" />
+    </AssociationSet>
+    <AssociationSet Name="FK__userBooki__userI__1DE57479" Association="GalaxyDBModel.FK__userBooki__userI__1DE57479">
+      <End Role="user" EntitySet="users" />
+      <End Role="userBooking" EntitySet="userBookings" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Room">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="hotelid" Type="Int32" />
+    <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="CreatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+    <Property Name="ModifiedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="TStamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+  </EntityType>
+  <EntityType Name="hotel">
+    <Key>
+      <PropertyRef Name="hotelId" />
+    </Key>
+    <Property Name="hotelId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="hotelName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="city" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="zipCode" Type="Int32" />
+    <NavigationProperty Name="userBookings" Relationship="GalaxyDBModel.FK__userBooki__hotel__1ED998B2" FromRole="hotel" ToRole="userBooking" />
+  </EntityType>
+  <EntityType Name="logging">
+    <Key>
+      <PropertyRef Name="logId" />
+    </Key>
+    <Property Name="logId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="discription" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="createdDateTime" Type="DateTime" Precision="3" />
+    <Property Name="userId" Type="Int32" />
+    <NavigationProperty Name="user" Relationship="GalaxyDBModel.FK__logging__userId__15502E78" FromRole="logging" ToRole="user" />
+  </EntityType>
+  <EntityType Name="userBooking">
+    <Key>
+      <PropertyRef Name="transactionId" />
+    </Key>
+    <Property Name="transactionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="userId" Type="Int32" />
+    <Property Name="hotelId" Type="Int32" />
+    <Property Name="numberOfRooms" Type="Int32" />
+    <Property Name="roomType" Type="Int32" />
+    <Property Name="totalPrice" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="createdDateTime" Type="DateTime" Precision="3" />
+    <Property Name="modifiedBy" Type="Int32" />
+    <Property Name="modifiedDate" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="hotel" Relationship="GalaxyDBModel.FK__userBooki__hotel__1ED998B2" FromRole="userBooking" ToRole="hotel" />
+    <NavigationProperty Name="user" Relationship="GalaxyDBModel.FK__userBooki__userI__1DE57479" FromRole="userBooking" ToRole="user" />
+  </EntityType>
+  <EntityType Name="user">
+    <Key>
+      <PropertyRef Name="userId" />
+    </Key>
+    <Property Name="userId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="userName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="roleType" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="createdDateTime" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="loggings" Relationship="GalaxyDBModel.FK__logging__userId__15502E78" FromRole="user" ToRole="logging" />
+    <NavigationProperty Name="userBookings" Relationship="GalaxyDBModel.FK__userBooki__userI__1DE57479" FromRole="user" ToRole="userBooking" />
+  </EntityType>
+  <Association Name="FK__userBooki__hotel__1ED998B2">
+    <End Type="GalaxyDBModel.hotel" Role="hotel" Multiplicity="0..1" />
+    <End Type="GalaxyDBModel.userBooking" Role="userBooking" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="hotel">
+        <PropertyRef Name="hotelId" />
+      </Principal>
+      <Dependent Role="userBooking">
+        <PropertyRef Name="hotelId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__logging__userId__15502E78">
+    <End Type="GalaxyDBModel.user" Role="user" Multiplicity="0..1" />
+    <End Type="GalaxyDBModel.logging" Role="logging" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="user">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="logging">
+        <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__userBooki__userI__1DE57479">
+    <End Type="GalaxyDBModel.user" Role="user" Multiplicity="0..1" />
+    <End Type="GalaxyDBModel.userBooking" Role="userBooking" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="user">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="userBooking">
+        <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
